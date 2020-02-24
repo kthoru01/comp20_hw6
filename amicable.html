@@ -1,0 +1,221 @@
+<!-- Katya Thorup -->
+<!-- Comp 20 Homework 6 -->
+<!-- Last date revised: 2/24/2020 -->
+<!-- File that gets 2 user inputed nunbers, checks of they are amicable
+     and displays the result of the check.
+     Amicable numbers are numbers whole factors (not including themselves)
+     add up to each other -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Amicable Numbers</title>
+    <style type="text/css">
+        html,body,input {font-size:30px;}
+        div {display: inline-block; font-weight: bold;}
+        a {border: 2px solid #000000; padding: 3px;}
+    </style>
+
+</head>
+
+<body>
+
+    <h2> Amicable Numbers </h2>
+
+    <form id="form1" name="form1">
+        Number 1 <input type="text" name="num1" id="num1"><br />
+        Number 2 <input type="text" name="num2" id="num2">
+        <br />
+        <input type="button" value = "Check if Amicable" onclick ="Amicable()">
+
+    </form>
+
+    <br/>
+    Input numbers are:
+    <div id="input"></div>
+
+    <br/><br/>
+    Factors of Number 1 are:
+    <div id="factors1"></div>
+    
+    <br/><br/>
+    Factors of Number 2 are:
+    <div id="factors2"></div>
+
+    <br/><br/>
+    Are factors <em>amicable</em>?:
+    <div id="result"></div>
+
+    <br/><br/>
+    <a href = index.html>Click Here to go to QuickPick</a>
+
+    <script language="javascript">
+
+        function Amicable() {
+            var input = getInput(); // Get user input
+
+            var factors_num1 = getFactors(input[0]); // Number 1
+            showFactors(factors_num1, "factors1");
+            var factors_num2 = getFactors(input[1]); // NUmber 2
+            showFactors(factors_num2, "factors2");
+
+            // Find sum of factors for each number
+            sum_factors_num1 = addFactors(factors_num1);
+            sum_factors_num2 = addFactors(factors_num2);
+
+            if ((sum_factors_num1 == input[1]) && (sum_factors_num2 == input[0])) {
+                document.getElementById("result").innerHTML = "Yes";
+            }
+            else {
+                document.getElementById("result").innerHTML = "No";
+            }
+        }
+
+        // Function used to fulfill #1 of homework part 2
+        /* Function is edited to obtain the form input to check is values
+           are amicable */
+        // Return: An array of 2 values: array[0] = num1, array[1] = num2
+        function getInput(){
+            // Retrieve user input and change it from string to int
+            var n1 = document.form1.num1.value;
+            n1 = parseInt(n1);
+            var n2 = document.form1.num2.value;
+            n2 = parseInt(n2);
+            if (isNaN(n1) || isNaN(n2)) {
+                document.form1.reset();
+                alert("Please enter proper numbers");
+                return;
+            }
+            else {
+                document.getElementById("input").innerHTML = n1 + " and " + n2;
+                var input = [n1, n2];
+                return input;
+            }
+        }
+
+        // Checks if test_num values is a factor of num
+        function isFactor(num, test_num) {
+            return ((num % test_num) == 0);
+        }
+
+        // Displays the values in the factors array to an HTML div
+        // factors: array of factor values
+        // str: id of HTML element the factors are to be placed in
+        function showFactors(factors, str) {
+            var i;
+            var text1 = "";
+
+            if (factors.length == 0) {
+                document.getElementById(str).innerHTML = "No factors to show";
+            }
+            else {
+                for (i = 0; i < factors.length - 1; i++) {
+                    text1 += factors[i] + " ";
+                }
+                text1 += factors[factors.length - 1];
+                document.getElementById(str).innerHTML = text1;
+            }
+        }
+
+        // Add the values contained in the factors array and return the result to the caller
+        function addFactors(factors) {
+            var i;
+            var sum = 0;
+
+            if (factors.length == 0) {
+                return 0;
+            }
+
+            for (i = 0; i < factors.length; i++) {
+                sum += factors[i];
+            }
+
+            return sum;
+        }
+
+        /* Computers all of the factors present in num value and return the array of
+           those factors */
+        function getFactors(num) {
+            var factors = [];
+            var i = 1;
+
+            while(i < num) {
+                if (isFactor(num, i)) {
+                    factors.push(i);
+                }
+                i++;
+            }
+
+            return factors;
+        }
+
+        // Called this function by changing onclick function to "testIsFactor()"
+        // Function to test isFactors() fucntion
+        /*function testIsFactor() {
+            var n1 = 4;
+            var n2 = 2;
+            if (isFactor(n1, n2)) {
+                alert(n2 + " is factor of " + n1);
+            }
+            else {
+                alert(n2 + " is not a factor of " + n1);
+            }
+
+            var n1 = 4;
+            var n2 = 3;
+            if (isFactor(n1, n2)) {
+                alert(n2 + " is factor of " + n1);
+            }
+            else {
+                alert(n2 + " is not a factor of " + n1);
+            }
+        } */
+
+        // Called this function by changing onclick function to "testShowFactors()"
+        // Function to test showFactors() function
+        /*function testShowFactors() {
+            factors = [1, 2, 3, 4, 5];
+            showFactors(factors, "factors1");
+
+            factors = [];
+            showFactors(factors, "factors2");
+        }*/
+
+        // Called this function by changing onclick function to "testAddFactors()"
+        // Function to test addFactors() function
+        /*function testAddFactors() {
+            var factors = [1, 2, 3, 4, 5];
+            var sum = addFactors(factors)
+            alert("Sum of " + factors + " is " + sum);
+
+            var factors = [1, -1];
+            var sum = addFactors(factors)
+            alert("Sum of " + factors + " is " + sum);
+
+            var factors = [];
+            var sum = addFactors(factors)
+            alert("Sum of " + factors + " is " + sum);
+
+            var factors = [1, -2];
+            var sum = addFactors(factors)
+            alert("Sum of " + factors + " is " + sum);
+
+            var factors = [-1, 2];
+            var sum = addFactors(factors)
+            alert("Sum of " + factors + " is " + sum);
+        } */
+
+        // Called this function by changing onclick function to "testGetFactors()"
+        // Function used to test the getFactors() function
+        /*function testGetFactors() {
+            var factors = getFactors(220);
+            alert("Factors of 220 are " + factors);
+
+            factors = getFactors(284);
+            alert("Factors of 284 are " + factors);
+        }*/
+
+    </script>
+
+</body>
+</html>

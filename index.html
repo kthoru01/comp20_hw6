@@ -1,0 +1,179 @@
+<!-- Katya Thorup -->
+<!-- Comp 20 Homework 6 -->
+<!-- Last date revised: 2/24/2020 -->
+<!-- File used to generate 6 randowm numbers, recive user input numbers
+     and check how many of the user inputed numbers match the generated numbers.
+     Based on the matches a payout ot the user is determined and displayed -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>QuickPick</title>
+    <style type="text/css">
+        html,body,input {font-size:30px;}
+        a {border: 2px solid #000000; padding: 3px;}
+    </style>
+    
+    <script language="javascript">
+        function generatePayout(num_matches){
+            switch(num_matches) {
+                case 1:
+                    document.getElementById("payout").innerHTML = "$0: matched 1 quick pick value";
+                    break;
+                case 2:
+                    document.getElementById("payout").innerHTML = "$3: matched 2 quick pick values";
+                    break;
+                case 3:
+                    document.getElementById("payout").innerHTML = "$20: matched 3 quick pick values";
+                    break;
+                case 4:
+                    document.getElementById("payout").innerHTML = "$200: matched 4 quick pick values";
+                    break;
+                case 5:
+                    document.getElementById("payout").innerHTML = "$25,000 a YEAR for LIFE!: matched 5 quick pick values";
+                    break;
+                case 10:
+                    document.getElementById("payout").innerHTML = "$4: matched Lucky Ball";
+                    break;
+                case 11:
+                    document.getElementById("payout").innerHTML = "$6: matched 1 quick pick value and Lucky Ball";
+                    break;
+                case 12:
+                    document.getElementById("payout").innerHTML = "$25: matched 2 quick pick values and Lucky Ball";
+                    break;
+                case 13:
+                    document.getElementById("payout").innerHTML = "$150: matched 3 quick pick values and Lucky Ball";
+                    break;
+                case 14:
+                    document.getElementById("payout").innerHTML = "$5000: matched 4 quick pick values and Lucky Ball";
+                    break;
+                case 15:
+                    document.getElementById("payout").innerHTML = "$7,000 a WEEK for LIFE!: matched 5 quick pick values and Lucky Ball";
+                    break;
+                default:
+                    document.getElementById("payout").innerHTML = "$0: Sorry you did not win anything";
+                    break;
+            }
+        }
+
+        function parseStr(num_elem, str){
+            var temp = str.split(' '); // Split input into its componets
+            var nums = []; // Final array of numbers
+            var i, j = 0; // indexing variables
+
+            /* Parsing the temp array to pick out just numbers. Done in case the
+               user inputs too may spaces or letters or if number of entries > 5 */
+            for (i = 0; i < temp.length; i++) {
+                if (temp[i] != '') {
+                    if((!isNaN(parseInt(temp[i]))) && (j < num_elem)) {
+                        nums[j] = temp[i];
+                        j++;
+                    }
+                }
+            }
+            return nums;
+        }
+
+        function calculateMatches() {
+            // Get user input
+            var n1 = document.MassLot.num1.value; // user quick picks
+            var n2 = document.MassLot.num2.value; // power ball
+            n2 = parseInt(n2);
+
+            player_nums = parseStr(5, n1); // retrieve player quick pick numbers out of inputed string
+
+            // Retrive the unsorted randomly generated values
+            var unsorted_nums_str = document.getElementById("unsorted").innerHTML;
+            var unsorted_nums = parseStr(6, unsorted_nums_str);
+            var power_ball = unsorted_nums[5];
+
+            // Determine number of matches between user quick picks and generated quick picks
+            var num_matches = 0;
+            for (i = 0; i < 5; i++) {
+                if(unsorted_nums.indexOf(player_nums[i]) != -1) {
+                    num_matches++;
+                }
+            }
+
+            // Check if the power ball matches
+            /* If matches add 10 to num matches to make it easier to use switch case
+               statements to determine the payout */
+            if (n2 == power_ball) {
+                num_matches = num_matches + 10;
+            }
+
+            generatePayout(num_matches);
+        }
+        
+    </script>
+
+</head>
+
+<body>
+
+    <h2> Mass Lottery Quick Pick Numbers </h2>
+
+    <div>
+        Unsorted quick pick numbers 
+        <div id="unsorted" name="unsorted"></div><br/>
+        Sorted quick pick numbers<br/>
+        <div id="sorted" name="sorted"></div><br/>
+    </div>
+    <hr />
+
+    <form name="MassLot">
+        5 Unique Numbers (numbers from 1 to 48, seperated by space) <input type="text" name="num1" id="num1"><br />
+        Lucky Ball (number from 1 to 18) <input type="text" name="num2" id="num2">
+        <br />
+        <input type="button" value = "Calculate Payout" onclick ="calculateMatches()">
+
+    </form>
+
+    <br/>
+    <div> <strong>Your pay out is: </strong></div>
+    <div id="payout"></div>
+    <hr />
+
+    <br/>
+    <a href = amicable.html>Click here to go to Amicable Numbers</a>
+
+     <script type="text/javascript">
+        // Generate an array of 5 uniques values in between 1 and 48
+        function generateQuickPick() {
+            var quick_pick = []; // array of random numbers
+            var i; // index variable for the for loop
+
+            // Generating unique quick pick numbers
+            for (i = 0; i < 5; i++) {
+                var num = Math.round(Math.random() * 47 + 1);
+                while(quick_pick.indexOf(num) != -1) {
+                    num = Math.round(Math.random() * 47 + 1);
+                }
+                quick_pick[i] = num;
+            }
+            return quick_pick;
+        }
+
+        var quick_pick = generateQuickPick();
+        var lucky_ball = Math.round(Math.random() * 17 + 1);
+
+        //Writing quick pick numbers to screen
+        var text1 = "";
+        for (i = 0; i < 5; i++) {
+            text1 += quick_pick[i] + " ";
+        }
+        text1 += lucky_ball;
+        document.getElementById("unsorted").innerHTML = text1;
+
+        // Sorting the quick pick numbers and then writing them to screen
+        quick_pick_sorted = quick_pick.sort(function(a, b){return a-b});
+        var text2 = "";
+        for (i = 0; i < 5; i++) {
+            text2 += quick_pick_sorted[i] + " ";
+        }
+        text2 += lucky_ball;
+        document.getElementById("sorted").innerHTML = text2;
+    </script>
+    
+</body>
+</html>
